@@ -3,7 +3,7 @@ import os
 from flask import Flask, request, jsonify
 from lib import AgentConflict
 
-ENV_NAME = os.environ["ALG_ENV"] or "dev"
+ENV_NAME = os.getenv("ALG_ENV", "dev")
 
 server = Flask(__name__)
 if ENV_NAME != "prod":
@@ -72,5 +72,5 @@ def notFoundErrorHandler(e):
 
 
 if __name__ == "__main__":
-    PORT = os.environ["ALG_SERVER_PORT"] or "5000"
+    PORT = os.getenv("ALG_SERVER_PORT", "5000")
     server.run(host="0.0.0.0", port=int(PORT), use_reloader=False)

@@ -2,10 +2,10 @@ from flask import Flask, jsonify
 import requests
 import os
 
-SERVER_ADDR = os.environ["ALG_SERVER_ADDR"]
-AGENT_ADDR = os.environ["ALG_AGENT_ADDR"] or "http://localhost:5000"
-AGENT_ID = os.environ["ALG_AGENT_ID"]
-ENV_NAME = os.environ["ALG_ENV"] or "dev"
+SERVER_ADDR = os.getenv("ALG_SERVER_ADDR")
+AGENT_ADDR = os.getenv("ALG_AGENT_ADDR", "http://localhost:5000")
+AGENT_ID = os.getenv("ALG_AGENT_ID")
+ENV_NAME = os.getenv("ALG_ENV", "dev")
 
 agent = Flask(__name__)
 if ENV_NAME != "prod":
@@ -37,5 +37,5 @@ def notFoundErrorHandler(e):
 
 
 if __name__ == "__main__":
-    PORT = os.environ["ALG_AGENT_PORT"] or "5000"
+    PORT = os.getenv("ALG_AGENT_PORT", "5000")
     agent.run(host="0.0.0.0", port=int(PORT), use_reloader=False)
