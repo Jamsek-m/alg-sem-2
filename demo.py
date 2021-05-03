@@ -27,15 +27,15 @@ def correct_grad(grads, n, f):
 def check_if_close_enough(g, limit=0.05):
     return g[0] < limit and g[1] < limit
 
-
 A = (1, 1)
 B = (10, 0)
 C = (17, 1)
-D = (2, 7)
-FF = (33, 138)
+# D = (2, 7)
+FF1 = (33, 138)
+FF2 = (31, 1381)
 
 n = 5  # number of the agents
-f = 1  # number of the Byzantine faulty agents
+f = 2  # number of the Byzantine faulty agents
 w = [7, 12]  # estimation
 step = 0.05  # constant
 
@@ -43,10 +43,12 @@ for i in range(100):
     gA = agent_calc_grad(A, w)
     gB = agent_calc_grad(B, w)
     gC = agent_calc_grad(C, w)
-    gD = agent_calc_grad(D, w)
-    gFF = agent_calc_grad(FF, w)
+    # gD = agent_calc_grad(D, w)
+    gFF = agent_calc_grad(FF1, w)
+    gFF = agent_calc_grad(FF2, w)
 
-    g = correct_grad([gA, gB, gC, gD, gFF], n, f)
+    # g = correct_grad([gA, gB, gC, gD, gFF], n, f)
+    g = correct_grad([gA, gB, gC, FF1, FF2], n, f)
     if check_if_close_enough(g):
         print(w[0], ' ', w[1])
         print(i)
