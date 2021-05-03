@@ -51,7 +51,6 @@ while True:
     for i in range(0, len(agents)):
         grads[i] = agent_calc_grad(agents[i], w)
 
-    # g = correct_grad([gA, gB, gC, gD, gFF], n, f)
     g = correct_grad(grads, n, f)
     if check_if_close_enough(g):
         print('meeting point (x, y): ', w[0], ' ', w[1])
