@@ -1,4 +1,5 @@
 import math
+import matplotlib.pyplot as plt
 
 
 def agent_calc_grad(agent, w):
@@ -28,14 +29,22 @@ def correct_grad(grads, n, f):
 
 def check_if_close_enough(g, limit=0.05):
     # check if the estimation is good enough (aggregated gradient is small enough)
-    return g[0] < limit and g[1] < limit
+    return math.fabs(g[0]) < limit and math.fabs(g[1]) < limit
+
+
+def draw(agents, w):
+    # plot the agents and the estimated meeting point
+    x, y = zip(*agents)
+    plt.scatter(x, y, color='blue')
+    plt.scatter(w[0], w[1], color='red')
+    plt.show()
 
 
 # Assume that the agents are taxi drivers in the city of San Francisco,
 # which on our map lies between 0 and 20 on the x axis and 0 and 30 on the y axis
 
 # arguments:
-agents = [(1, 1), (10, 0), (17, 1), (33, 138), (31, 1381)]  # agents
+agents = [(1, 1), (10, 0), (17, 1), (33, 138), (67, 281)]  # agents
 f = 2  # number of the Byzantine faulty agents (f < n/2)
 w = [10, 15]  # first estimation (random or something)
 step = 0.05  # constant (speed of moving on the gradient)
@@ -57,5 +66,8 @@ while True:
         print('steps: ', c)
         break
     else:
+        # move in gradient's direction for a small amount
         w[0] = w[0] - step * g[0]
         w[1] = w[1] - step * g[1]
+
+draw(agents, w)
