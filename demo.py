@@ -2,10 +2,13 @@ import math
 
 
 def agent_calc_grad(agent, w):
+    # calculates the gradient (really simple in our case - no derivatives)
     return w[0] - agent[0], w[1] - agent[1]
 
 
 def correct_grad(grads, n, f):
+    # filters and aggregates the gradients
+
     # filter
     norms = []
     for gi in grads:
@@ -14,7 +17,6 @@ def correct_grad(grads, n, f):
     for i in range(n - f, n):  # clips f largest gradients to the value of the (f + 1)-th largest norm
         norms[i] = norms[f + 1 - 1]
         grads[i] = grads[f + 1 - 1]
-
 
     # aggregate
     x, y = 0, 0
@@ -25,21 +27,33 @@ def correct_grad(grads, n, f):
 
 
 def check_if_close_enough(g, limit=0.05):
+    # check if the estimation is good enough (aggregated gradient is small enough)
     return g[0] < limit and g[1] < limit
 
+
+# Assume that the agents are taxi drivers in the city of San Francisco,
+# which on our map lies between 0 and 20 on the x axis and 0 and 30 on the y axis
+
+# working agents (in San Francisco)
 A = (1, 1)
 B = (10, 0)
 C = (17, 1)
 # D = (2, 7)
+
+# faulty agents (sending random data or they don't send it at all)
+# TODO handle at the server: if no data is received from an agent -> this agent must be faulty
 FF1 = (33, 138)
 FF2 = (31, 1381)
 
 n = 5  # number of the agents
-f = 2  # number of the Byzantine faulty agents
+f = 2  # number of the Byzantine faulty agents (f < n/2)
 w = [7, 12]  # estimation
-step = 0.05  # constant
+step = 0.05  # constant (speed of moving on the gradient)
 
-for i in range(100):
+i = 0
+while True:
+    i += 1
+    # simulation of receiving gradients from the agents
     gA = agent_calc_grad(A, w)
     gB = agent_calc_grad(B, w)
     gC = agent_calc_grad(C, w)
@@ -50,8 +64,8 @@ for i in range(100):
     # g = correct_grad([gA, gB, gC, gD, gFF], n, f)
     g = correct_grad([gA, gB, gC, FF1, FF2], n, f)
     if check_if_close_enough(g):
-        print(w[0], ' ', w[1])
-        print(i)
+        print('meeting point (x, y): ', w[0], ' ', w[1])
+        print('steps: ', i)
         break
     else:
         w[0] = w[0] - step * g[0]
