@@ -45,7 +45,7 @@ def draw(agents, w):
 
 # arguments:
 agents = [(1, 1), (10, 0), (17, 1), (33, 138), (67, 281)]  # agents
-f = 2  # number of the Byzantine faulty agents (f < n/2)
+f = 2  # number of the Byzantine faulty agents (f < n/2) TODO: try to detect automatically
 w = [10, 15]  # first estimation (random or something)
 step = 0.05  # constant (speed of moving on the gradient)
 
