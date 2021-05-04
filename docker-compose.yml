@@ -13,7 +13,7 @@ services:
       - "5000:5000"
     environment:
       ALG_SERVER_PORT: 5000
-      ALG_ENV: dev
+      ALG_ENV: prod
       ALG_SERVER_W_X: 10
       ALG_SERVER_W_Y: 15
     networks:
@@ -30,7 +30,7 @@ services:
       ALG_AGENT_PORT: 5000
       ALG_SERVER_ADDR: http://alg-server:5000
       ALG_AGENT_ADDR: http://alg-agent-1:5000
-      ALG_ENV: dev
+      ALG_ENV: prod
       ALG_AGENT_X: 1
       ALG_AGENT_Y: 1
     networks:
