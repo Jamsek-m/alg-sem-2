@@ -39,7 +39,7 @@ def registerAgent():
 
 @server.route("/cost", methods=["POST"])
 def getAgentCost():
-    meetingPoint, steps = calculateConsensus(AGENT_STORE, W)
+    meetingPoint, steps = calculateConsensus(AGENT_STORE, W.copy())
     return jsonify({"meetingPoint": {"x": meetingPoint.x, "y": meetingPoint.y}, "steps": steps})
 
 

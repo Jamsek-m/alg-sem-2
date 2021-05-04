@@ -8,6 +8,9 @@ class Point:
         self.x = x
         self.y = y
 
+    def copy(self: Point) -> Point:
+        return Point(self.x, self.y)
+
 
 class Agent:
     def __init__(self, agentId: str, agentAddress: str):
