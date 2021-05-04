@@ -47,8 +47,8 @@ services:
       ALG_SERVER_ADDR: http://alg-server:5000
       ALG_AGENT_ADDR: http://alg-agent-2:5000
       ALG_ENV: prod
-      ALG_AGENT_X: 10
-      ALG_AGENT_Y: 0
+      ALG_AGENT_X: 12
+      ALG_AGENT_Y: 11
     networks:
       - alg-net
     depends_on:
@@ -63,8 +63,8 @@ services:
       ALG_SERVER_ADDR: http://alg-server:5000
       ALG_AGENT_ADDR: http://alg-agent-3:5000
       ALG_ENV: prod
-      ALG_AGENT_X: 17
-      ALG_AGENT_Y: 1
+      ALG_AGENT_X: 10
+      ALG_AGENT_Y: 0
     networks:
       - alg-net
     depends_on:
@@ -79,8 +79,8 @@ services:
       ALG_SERVER_ADDR: http://alg-server:5000
       ALG_AGENT_ADDR: http://alg-agent-4:5000
       ALG_ENV: prod
-      ALG_AGENT_X: 33
-      ALG_AGENT_Y: 138
+      ALG_AGENT_X: 17
+      ALG_AGENT_Y: 1
     networks:
       - alg-net
     depends_on:
@@ -95,8 +95,8 @@ services:
       ALG_SERVER_ADDR: http://alg-server:5000
       ALG_AGENT_ADDR: http://alg-agent-5:5000
       ALG_ENV: prod
-      ALG_AGENT_X: 67
-      ALG_AGENT_Y: 281
+      ALG_AGENT_X: 333
+      ALG_AGENT_Y: 191
     networks:
       - alg-net
     depends_on:

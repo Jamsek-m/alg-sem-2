@@ -5,15 +5,11 @@ from typing import List, Tuple, cast
 
 
 def correctGradient(gradients: List[Point], n: int, f: int) -> Point:
-    norms = []
-    for gi in gradients:
-        norms.append(math.sqrt(math.pow(gi.x, 2) + math.pow(gi.y, 2)))
-    norms.sort()
+    sortedGradients = sorted(gradients, key=lambda g: math.sqrt(math.pow(g.x, 2) + math.pow(g.y, 2)))
     for i in range(n - f, n):
-        norms[i] = norms[f]
-        gradients[i] = gradients[f]
+        sortedGradients[i] = sortedGradients[f]
     x, y = 0.0, 0.0
-    for gi in gradients:
+    for gi in sortedGradients:
         x += gi.x
         y += gi.y
     return Point(x, y)
@@ -26,7 +22,7 @@ def closeEnough(g: Point, limit=0.05) -> bool:
 def calculateConsensus(agentStore: AgentStore, W: Point, step=0.05) -> Tuple[Point, int]:
     agents = agentStore.getAgents()
     n = len(agents)
-    f = 2
+    f = 1
     gradients: List[Point] = cast(List[Point], [None for _ in agents])
     stepCounter = 0
     while True:
