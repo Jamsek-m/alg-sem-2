@@ -22,7 +22,7 @@ def closeEnough(g: Point, limit=0.05) -> bool:
 def calculateConsensus(agentStore: AgentStore, W: Point, step=0.05) -> Tuple[Point, int]:
     agents = agentStore.getAgents()
     n = len(agents)
-    f = 1
+    f = 2
     gradients: List[Point] = cast(List[Point], [None for _ in agents])
     stepCounter = 0
     while True:

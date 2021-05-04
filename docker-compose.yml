@@ -23,11 +23,8 @@ services:
       context: .
       dockerfile: ./Dockerfile.agent
     image: alg-agent:latest
-    ports:
-      - "5001:5000"
     environment:
       ALG_AGENT_ID: agent-1
-      ALG_AGENT_PORT: 5000
       ALG_SERVER_ADDR: http://alg-server:5000
       ALG_AGENT_ADDR: http://alg-agent-1:5000
       ALG_ENV: prod
@@ -39,11 +36,8 @@ services:
       - alg-server
   alg-agent-2:
     image: alg-agent:latest
-    ports:
-      - "5002:5000"
     environment:
       ALG_AGENT_ID: agent-2
-      ALG_AGENT_PORT: 5000
       ALG_SERVER_ADDR: http://alg-server:5000
       ALG_AGENT_ADDR: http://alg-agent-2:5000
       ALG_ENV: prod
@@ -55,11 +49,8 @@ services:
       - alg-server
   alg-agent-3:
     image: alg-agent:latest
-    ports:
-      - "5003:5000"
     environment:
       ALG_AGENT_ID: agent-3
-      ALG_AGENT_PORT: 5000
       ALG_SERVER_ADDR: http://alg-server:5000
       ALG_AGENT_ADDR: http://alg-agent-3:5000
       ALG_ENV: prod
@@ -71,11 +62,8 @@ services:
       - alg-server
   alg-agent-4:
     image: alg-agent:latest
-    ports:
-      - "5004:5000"
     environment:
       ALG_AGENT_ID: agent-4
-      ALG_AGENT_PORT: 5000
       ALG_SERVER_ADDR: http://alg-server:5000
       ALG_AGENT_ADDR: http://alg-agent-4:5000
       ALG_ENV: prod
@@ -87,16 +75,52 @@ services:
       - alg-server
   alg-agent-5:
     image: alg-agent:latest
-    ports:
-      - "5005:5000"
     environment:
       ALG_AGENT_ID: agent-5
-      ALG_AGENT_PORT: 5000
       ALG_SERVER_ADDR: http://alg-server:5000
       ALG_AGENT_ADDR: http://alg-agent-5:5000
       ALG_ENV: prod
       ALG_AGENT_X: 333
       ALG_AGENT_Y: 191
+    networks:
+      - alg-net
+    depends_on:
+      - alg-server
+  alg-agent-6:
+    image: alg-agent:latest
+    environment:
+      ALG_AGENT_ID: agent-6
+      ALG_SERVER_ADDR: http://alg-server:5000
+      ALG_AGENT_ADDR: http://alg-agent-6:5000
+      ALG_ENV: prod
+      ALG_AGENT_X: 1
+      ALG_AGENT_Y: 4
+    networks:
+      - alg-net
+    depends_on:
+      - alg-server
+  alg-agent-7:
+    image: alg-agent:latest
+    environment:
+      ALG_AGENT_ID: agent-7
+      ALG_SERVER_ADDR: http://alg-server:5000
+      ALG_AGENT_ADDR: http://alg-agent-7:5000
+      ALG_ENV: prod
+      ALG_AGENT_X: 19
+      ALG_AGENT_Y: 20
+    networks:
+      - alg-net
+    depends_on:
+      - alg-server
+  alg-agent-8:
+    image: alg-agent:latest
+    environment:
+      ALG_AGENT_ID: agent-8
+      ALG_SERVER_ADDR: http://alg-server:5000
+      ALG_AGENT_ADDR: http://alg-agent-8:5000
+      ALG_ENV: prod
+      ALG_AGENT_X: 233
+      ALG_AGENT_Y: 91
     networks:
       - alg-net
     depends_on:
