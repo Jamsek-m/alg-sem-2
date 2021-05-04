@@ -37,7 +37,7 @@ def registerAgent():
         raise AgentConflict("Agent with given id already registered!")
 
 
-@server.route("/cost", methods=["POST"])
+@server.route("/consensus", methods=["POST"])
 def getAgentCost():
     meetingPoint, steps = calculateConsensus(AGENT_STORE, W.copy())
     return jsonify({"meetingPoint": {"x": meetingPoint.x, "y": meetingPoint.y}, "steps": steps})

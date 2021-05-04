@@ -32,10 +32,10 @@ def calculateConsensus(agentStore: AgentStore, W: Point, step=0.05) -> Tuple[Poi
     while True:
         stepCounter += 1
         for index, agent in enumerate(agents):
-            gradients[index] = agent.queryCost(W.copy())
+            gradients[index] = agent.queryCost(W)
         g = correctGradient(gradients, n, f)
         if closeEnough(g):
-            return W.copy(), stepCounter
+            return Point(W.x, W.y), stepCounter
         else:
             W.x = W.x - step * g.x
             W.y = W.y - step * g.y
