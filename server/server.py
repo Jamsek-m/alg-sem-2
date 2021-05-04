@@ -1,61 +1,46 @@
-import requests
 import os
 from flask import Flask, request, jsonify
-from lib import AgentConflict
+from lib import AgentConflict, Agent, Point
+from store import AgentStore
+from typing import Any
+from consensus import calculateConsensus
 
 ENV_NAME = os.getenv("ALG_ENV", "dev")
+ALG_SERVER_W_X = os.getenv("ALG_SERVER_W_X")
+ALG_SERVER_W_Y = os.getenv("ALG_SERVER_W_Y")
 
 server = Flask(__name__)
 if ENV_NAME != "prod":
     print("Running in DEV mode!")
     server.config["DEBUG"] = True
 
-AGENTS = []
-
-
-def addAgent(newAgent) -> bool:
-    for agent in AGENTS:
-        if agent["id"] == newAgent["id"]:
-            return False
-    AGENTS.append(newAgent)
-    print("Agent {} registered!".format(newAgent["id"]))
-    return True
+W: Point = Point(float(ALG_SERVER_W_X), float(ALG_SERVER_W_Y))
+AGENT_STORE = AgentStore()
 
 
 @server.route("/agents", methods=["GET"])
 def getRegisteredAgents():
-    return jsonify(AGENTS)
+    return jsonify(list(map(lambda a: a.toDict(), AGENT_STORE.getAgents())))
 
 
 @server.route("/register", methods=["POST"])
 def registerAgent():
-    payload = request.json
-    agentId = payload["id"]
-    agentUrl = payload["url"]
-    registered = addAgent({"id": agentId, "url": agentUrl})
+    payload: Any = request.json
+    agentId = str(payload["id"])
+    agentUrl = str(payload["url"])
+    agent = Agent(agentId, agentUrl)
+    registered = AGENT_STORE.addAgent(agent)
     if registered:
-        message = "Agent {} registered at {}!".format(agentId, agentUrl)
+        message = "Agent {} registered at {}!".format(agent.agentId, agent.address)
         return jsonify({"status": 200, "message": message})
     else:
         raise AgentConflict("Agent with given id already registered!")
 
 
-def queryAgentCost(agent) -> float:
-    costUrl = agent["url"] + "/cost"
-    response = requests.post(costUrl)
-    if response.status_code == 200:
-        payload = response.json()
-        return float(payload["cost"])
-
-
 @server.route("/cost", methods=["POST"])
 def getAgentCost():
-    print("Started querying costs...")
-    summa = 0
-    for agent in AGENTS:
-        summa += queryAgentCost(agent)
-    print("Aggregated costs: " + str(summa))
-    return jsonify({"cost": summa})
+    meetingPoint, steps = calculateConsensus(AGENT_STORE, W)
+    return jsonify({"meetingPoint": {"x": meetingPoint.x, "y": meetingPoint.y}, "steps": steps})
 
 
 @server.errorhandler(AgentConflict)

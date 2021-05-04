@@ -1,36 +1,38 @@
-from flask import Flask, jsonify
-import requests
+from flask import Flask, jsonify, request
+from typing import Any
 import os
+from lib import Agent, Point
 
+# Load agent configuration
 SERVER_ADDR = os.getenv("ALG_SERVER_ADDR")
 AGENT_ADDR = os.getenv("ALG_AGENT_ADDR", "http://localhost:5000")
 AGENT_ID = os.getenv("ALG_AGENT_ID")
 ENV_NAME = os.getenv("ALG_ENV", "dev")
+AGENT_POS_X = os.getenv("ALG_AGENT_X")
+AGENT_POS_Y = os.getenv("ALG_AGENT_Y")
 
-agent = Flask(__name__)
+# Create agent
+AGENT = Agent(AGENT_ID, AGENT_ADDR, float(AGENT_POS_X), float(AGENT_POS_Y))
+
+# Create REST agent
+agentService = Flask(__name__)
 if ENV_NAME != "prod":
     print("Running in DEV mode!")
-    agent.config["DEBUG"] = True
+    agentService.config["DEBUG"] = True
+
+AGENT.registerToServer(SERVER_ADDR + "/register")
 
 
-def registerItself():
-    url = SERVER_ADDR + "/register"
-    print("Registering to server at: {}".format(url))
-    response = requests.post(url, json={"id": AGENT_ID, "url": AGENT_ADDR})
-    print("Received response with status: {}".format(response.status_code))
-    if response.status_code == 200:
-        print("Agent registered to server!")
+@agentService.route("/cost", methods=["POST"])
+def calculateAgentCost():
+    payload: Any = request.json
+    initialVector: Any = payload["w"]
+    w = Point(float(initialVector["x"]), float(initialVector["y"]))
+    newGradient = AGENT.calculateGradient(w)
+    return jsonify({"grad": {"x": newGradient.x, "y": newGradient.y}})
 
 
-registerItself()
-
-
-@agent.route("/cost", methods=["POST"])
-def getRegisteredAgents():
-    return jsonify({"cost": 0.5})
-
-
-@agent.errorhandler(404)
+@agentService.errorhandler(404)
 def notFoundErrorHandler(e):
     print(e)
     return jsonify({"status": 404, "error": "Requested resource not found!"})
@@ -38,4 +40,4 @@ def notFoundErrorHandler(e):
 
 if __name__ == "__main__":
     PORT = os.getenv("ALG_AGENT_PORT", "5000")
-    agent.run(host="0.0.0.0", port=int(PORT), use_reloader=False)
+    agentService.run(host="0.0.0.0", port=int(PORT), use_reloader=False)

@@ -10,6 +10,6 @@ WORKDIR /app
 COPY requirements.txt /app/
 RUN pip3 install -r requirements.txt
 
-COPY ./agent/agent.py /app/
+COPY ./agent/lib.py ./agent/agent.py /app/
 
 CMD ["python", "agent.py"]
