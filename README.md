@@ -8,6 +8,24 @@ Use docker-compose to build and run server and agents:
 docker-compose up --build
 ```
 
+Server is then exposed on port `5000`, so you can invoke consensus endpoint by creating HTTP request of type `POST` on `http://localhost:5000/consensus`.
+
+cURL command: `curl --location --request POST 'http://localhost:5000/consensus'`.
+
+Server then returns response in following format:
+
+```json5
+{
+    // coordinates of chosen meeting point
+    "meetingPoint": {
+        "x": 16.943072330772665,
+        "y": 26.88015977684865
+    },
+    // steps needed to calculate consensus
+    "steps": 15
+}
+```
+
 ### Run locally
 
 Run `pip install -r requirements.txt` in virtualenv to install required dependencies.
