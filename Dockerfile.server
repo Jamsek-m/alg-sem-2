@@ -10,6 +10,6 @@ WORKDIR /app
 COPY requirements.txt /app/
 RUN pip3 install -r requirements.txt
 
-COPY ./server/lib.py ./server/store.py ./server/consensus.py ./server/server.py /app/
+COPY ./server/lib.py ./server/town.py ./server/store.py ./server/consensus.py ./server/server.py /app/
 
 CMD ["python", "server.py"]

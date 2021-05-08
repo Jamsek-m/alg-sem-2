@@ -22,4 +22,4 @@ class Agent:
             print("Agent registered to server!")
 
     def calculateGradient(self: Agent, w: Point) -> Point:
-        return Point(w.x - self.location.x, w.y - self.location.y)
+        return Point(float(w.x) - float(self.location.x), float(w.y) - float(self.location.y))

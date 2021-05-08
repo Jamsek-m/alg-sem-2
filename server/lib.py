@@ -1,13 +1,12 @@
 from __future__ import annotations
 from typing import Dict, Any
 import requests
-import math
 
 
 class Point:
     @staticmethod
     def faultyPoint() -> Point:
-        return Point(math.inf, math.inf)
+        return Point(0.0, 0.0)
 
     def __init__(self, x: float, y: float):
         self.x = x
@@ -40,6 +39,15 @@ class AgentConflict(Exception):
     def __init__(self, message):
         Exception.__init__(self)
         self.message = message
+
+    def toDict(self):
+        return {"message": self.message}
+
+
+class SystemFault(Exception):
+    def __init__(self, n: int, f: int):
+        Exception.__init__(self)
+        self.message = "Too many faulty nodes! Out of {} nodes, at least {} are faulty. Algorithm needs 2f-redundancy to work properly.".format(n, f)
 
     def toDict(self):
         return {"message": self.message}

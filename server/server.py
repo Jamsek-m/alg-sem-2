@@ -1,6 +1,6 @@
 import os
 from flask import Flask, request, jsonify
-from lib import AgentConflict, Agent, Point
+from lib import AgentConflict, Agent, Point, SystemFault
 from store import AgentStore
 from typing import Any
 from consensus import calculateConsensus
@@ -8,6 +8,8 @@ from consensus import calculateConsensus
 ENV_NAME = os.getenv("ALG_ENV", "dev")
 ALG_SERVER_W_X = os.getenv("ALG_SERVER_W_X")
 ALG_SERVER_W_Y = os.getenv("ALG_SERVER_W_Y")
+ALG_STEP_SIZE = float(os.getenv("ALG_STEP_SIZE", "0.05"))
+ALG_LIMIT = float(os.getenv("ALG_LIMIT", "0.05"))
 
 server = Flask(__name__)
 if ENV_NAME != "prod":
@@ -39,7 +41,7 @@ def registerAgent():
 
 @server.route("/consensus", methods=["POST"])
 def getAgentCost():
-    meetingPoint, steps = calculateConsensus(AGENT_STORE, W.copy())
+    meetingPoint, steps = calculateConsensus(AGENT_STORE, W.copy(), step=ALG_STEP_SIZE, limit=ALG_LIMIT)
     return jsonify({"meetingPoint": {"x": meetingPoint.x, "y": meetingPoint.y}, "steps": steps})
 
 
@@ -47,6 +49,13 @@ def getAgentCost():
 def agentConflictHandler(e: AgentConflict):
     response = jsonify(e.toDict())
     response.status_code = 409
+    return response
+
+
+@server.errorhandler(SystemFault)
+def agentConflictHandler(e: SystemFault):
+    response = jsonify(e.toDict())
+    response.status_code = 400
     return response
 
 
