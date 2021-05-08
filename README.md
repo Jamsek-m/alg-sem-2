@@ -2,10 +2,16 @@
 
 ## Run 
 
-Use docker-compose to build and run server and agents:
+Use docker-compose (or Docker directly if running newer version) to build and run server and agents:
 
 ```bash
 docker-compose up --build
+```
+
+or 
+
+```bash
+docker compose up --build
 ```
 
 Server is then exposed on port `5000`, so you can invoke consensus endpoint by creating HTTP request of type `POST` on `http://localhost:5000/consensus`.
