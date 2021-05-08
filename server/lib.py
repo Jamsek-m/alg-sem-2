@@ -1,9 +1,14 @@
 from __future__ import annotations
 from typing import Dict, Any
 import requests
+import math
 
 
 class Point:
+    @staticmethod
+    def faultyPoint() -> Point:
+        return Point(math.inf, math.inf)
+
     def __init__(self, x: float, y: float):
         self.x = x
         self.y = y
